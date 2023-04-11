@@ -276,6 +276,12 @@ datasets:
       label_start: 0
     annotation: wider_0.pickle
     dataset_meta: wider_0.json
+    metrics:
+          - type: map
+            ignore_difficult: True
+            include_boundaries: False
+            allow_multiple_matches_per_ignored: True
+            use_filtered_tp: True
 
   - name: facial_landmarks_35
     data_source: VOCdevkit/VOC2012/JPEGImages

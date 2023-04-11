@@ -19,6 +19,7 @@ description: >-
     is pretrained in PyTorch* framework and converted to ONNX* format. For
     additional information refer to repository <https://github.com/mlperf/inference/tree/master/vision/classification_and_detection>.
 task_type: detection
+dataset: ms_coco_detection_80_class_with_background
 files:
   - name: resnet34-ssd1200.onnx
     size: 80363696

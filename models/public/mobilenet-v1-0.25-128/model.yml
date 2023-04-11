@@ -18,6 +18,7 @@ description: >-
   be built upon for classification, detection, embeddings and segmentation similar
   to how other popular large scale models are used. For details, see paper <https://arxiv.org/abs/1704.04861>.
 task_type: classification
+dataset: imagenet_1001_classes
 files:
   - name: mobilenet_v1_0.25_128.tgz
     size: 10800019

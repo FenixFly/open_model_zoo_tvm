@@ -499,10 +499,10 @@ class Model:
         with deserialization_context('In model "{}"'.format(name)):
             if not RE_MODEL_NAME.fullmatch(name):
                 raise DeserializationError('Invalid name, must consist only of letters, digits or ._-')
-
+            
             files = []
             file_names = set()
-
+                  
             for file in model['files']:
                 files.append(ModelFile.deserialize(file))
 
@@ -653,7 +653,7 @@ def load_models_from_args(parser, args):
                 if fnmatch.fnmatchcase(model.name, pattern)]
 
             if not matching_models:
-                sys.exit('No matching models: "{}"'.format(pattern))
+                raise NameError('No matching models: "{}"'.format(pattern))
 
             for model in matching_models:
                 models[model.name] = model

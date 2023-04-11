@@ -1,0 +1,31 @@
+# Copyright (c) 2019 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+description: >-
+  MACE-Inception-v3 from xiaomi/mace/miai-models
+task_type: classification
+dataset: imagenet_1001_classes
+files:
+  - name: mace_inceptionv3.pb
+    sha256: 632bb664547c846e7b4e44fe6a2ff9e35df277eb6440b80d9b559302baab1b8d
+    source: https://cnbj1.fds.api.xiaomi.com/mace/miai-models/inception-v3/inception-v3.pb
+    size: 95374725
+model_optimizer_args:
+  - --input_shape=[1,299,299,3]
+  - --input=input:0
+  - --mean_values=input:0[127.5,127.5,127.5]
+  - --scale_values=input:0[127.5]
+  - --output=InceptionV3/Predictions/Reshape_1:0
+framework: tf
+license: https://raw.githubusercontent.com/XiaoMi/mace-models/master/LICENSE

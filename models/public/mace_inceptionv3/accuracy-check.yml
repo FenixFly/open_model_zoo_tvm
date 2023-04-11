@@ -2,7 +2,7 @@ models:
   - name: mace_inceptionv3
     launchers:
       - framework: tvm
-        model: /Users/admin/workspace/open_model_zoo/models/tvm_compiled/compiled/mace_inceptionv3/mace_inceptionv3-default.so
+        model: /Users/admin/workspace/open_model_zoo/tools/downloader/public/mace_inceptionv3/mace_inceptionv3_cpu_local.so
         adapter: classification
         device: cpu
         session: local
@@ -10,14 +10,17 @@ models:
         inputs:
           - name: input:0
             type: INPUT
-            shape: 1,299,299,3
+            shape:
+              - 1
+              - 299
+              - 299
+              - 3
             layout: NHWC
         _input_precision:
-            - input:0:FP32
-        
+          - input:0:FP32
+        outputs: InceptionV3/Predictions/Reshape_1:0
     datasets:
       - name: imagenet_1001_classes
-        #reader: pillow_imread
         preprocessing:
           - type: crop
             central_fraction: 0.875
@@ -25,19 +28,19 @@ models:
             size: 299
           - type: bgr_to_rgb
           - type: normalization
-            mean: 127.5
-            std: 127.5 
-
+            mean:
+              - 127.5
+              - 127.5
+              - 127.5
+            std:
+              - 127.5
         metrics:
-            -   type: accuracy
-                top_k: 1
-                reference: 78.0
-                threshold: 0.5
-            -   type: accuracy
-                top_k: 5
-                reference: 93.9
-                threshold: 0.5
-            
+          - name: accuracy@top1
+            type: accuracy
+            top_k: 1
+          - name: accuracy@top5
+            type: accuracy
+            top_k: 5
         annotation: /Users/admin/workspace/scripts/datasets/perf_test_set/imagenet.pickle
         data_source: /Users/admin/workspace/scripts/datasets/perf_test_set/Imagenet_10
         dataset_meta: /Users/admin/workspace/scripts/datasets/perf_test_set/imagenet.json

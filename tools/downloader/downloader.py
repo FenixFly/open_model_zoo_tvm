@@ -20,6 +20,7 @@ import argparse
 import contextlib
 import functools
 import hashlib
+import os
 import re
 import requests
 import shutil
@@ -253,6 +254,12 @@ def download_model(reporter, args, cache, session_factory, requested_precisions,
         model_file_reporter.emit_event('model_file_download_begin', size=model_file.size)
 
         destination = output / model_file.name
+        
+        if not str(destination).endswith('.tar') or not str(destination).endswith('.tar.gz'):
+            if os.path.exists(destination):
+                model_file_reporter.log_warning(f'Skipping existing file: {destination}')
+                model_file_reporter.emit_event('model_file_download_end')
+                continue
 
         if not try_retrieve(model_file_reporter, destination, model_file, cache, args.num_attempts,
                 functools.partial(model_file.source.start_download, session, CHUNK_SIZE)):

@@ -17,6 +17,8 @@ description: >-
   repository <https://github.com/david8862/keras-YOLOv3-model-set> and converted to
   TensorFlow* framework. This model was pretrained on COCO* dataset with 80 classes.
 task_type: detection
+adapter: yolo_v3
+dataset: ms_coco_detection_80_class_without_background
 files:
   - name: yolo-v3.pb
     size: 248128731
