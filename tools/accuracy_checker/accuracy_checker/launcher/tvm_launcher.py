@@ -5,6 +5,7 @@ from ..config import NumberField, StringField, BoolField
 from .launcher import Launcher
 
 import numpy as np
+import importlib
 
 
 class TVMLauncher(Launcher):
@@ -86,8 +87,15 @@ class TVMLauncher(Launcher):
         if self.get_value_from_config("vm"):
             print("VirtualMachine Runtime not supported yet. Graph Executor used")
             
+        if str(model_path).endswith('tar') == True:
+            
+            lib = self._tvm.runtime.load_module(model_path)
 
-        if str(model_path).endswith('json') == True:
+            graph_executor = importlib.import_module('tvm.contrib.graph_executor')
+
+            return graph_executor.GraphModule(lib["default"](self._device))
+            
+        elif str(model_path).endswith('json') == True:
             
             params_path = str(model_path).replace('.json', '.params')
 
@@ -95,8 +103,8 @@ class TVMLauncher(Launcher):
                 graph_json = file.read()
             with open(params_path, 'rb') as fo:
                 params = self._tvm.relay.load_param_dict(fo.read())
-            mod = self._tvm.ir.load_json(graph_json)
 
+            mod = self._tvm.ir.load_json(graph_json)
 
             with self._tvm.transform.PassContext(opt_level=self._opt_level):
                 lib = self._tvm.relay.build(mod, target='llvm', params=params)
@@ -104,7 +112,7 @@ class TVMLauncher(Launcher):
             return self._tvm.contrib.graph_executor.GraphModule(lib['default'](self._device))
 
         else:
-            print("Only JSON/params model supported")
+            print("Only JSON/params and .tar model supported")
             raise ValueError("Only JSON/params model supported")
 
     def _generate_outputs(self):
